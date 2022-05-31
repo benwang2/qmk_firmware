@@ -17,11 +17,11 @@
 
 enum layers {
     _QWERTY = 0,
-    _DVORAK,
+    // _DVORAK,
     _COLEMAK_DH,
     _NAV,
     _SYM,
-    _FUNCTION,
+    // _FUNCTION,
     _ADJUST,
 };
 
@@ -33,7 +33,7 @@ enum layers {
 
 #define SYM      MO(_SYM)
 #define NAV      MO(_NAV)
-#define FKEYS    MO(_FUNCTION)
+// #define FKEYS    MO(_FUNCTION)
 #define ADJUST   MO(_ADJUST)
 
 #define CTL_ESC  MT(MOD_LCTL, KC_ESC)
@@ -50,7 +50,7 @@ uint16_t alt_tab_timer = 0;
 //ALT TAB Encoder Timer
 void matrix_scan_user(void) { // The very important timer.
   if (is_alt_tab_active || is_alt_shift_tab_active) {
-    if (timer_elapsed(alt_tab_timer) > 500 || !IS_LAYER_ON(_NAV)) {
+    if (timer_elapsed(alt_tab_timer) > 500 || !IS_LAYER_ON(_SYM)) {
       unregister_code(KC_LALT);
       unregister_code(KC_LSHIFT);
       is_alt_tab_active = false;
@@ -82,8 +82,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_QWERTY] = LAYOUT(
      KC_TAB  , KC_Q ,  KC_W   ,  KC_E  ,   KC_R ,   KC_T ,                                        KC_Y,   KC_U ,  KC_I ,   KC_O ,  KC_P , KC_BSPC,
      KC_LSFT , KC_A ,  KC_S   ,  KC_D  ,   KC_F ,   KC_G ,                                        KC_H,   KC_J ,  KC_K ,   KC_L ,KC_SCLN, KC_QUOT,
-     KC_LCTL, KC_Z ,  KC_X   ,  KC_C  ,   KC_V ,   KC_B ,  SYM,   KC_CAPS,         KC_CAPS , KC_RBRC, KC_N,   KC_M ,KC_COMM, KC_DOT , KC_SLASH, KC_ENT,
-                                ADJUST , KC_LGUI, KC_LALT, KC_SPC, NAV   ,           SYM   , KC_SPC , KC_RALT, FKEYS, KC_APP
+     KC_LCTL, KC_Z ,  KC_X    ,  KC_C  ,   KC_V ,   KC_B , KC_LBRC,KC_CAPS,         KC_CAPS , KC_RBRC, KC_N,   KC_M ,KC_COMM, KC_DOT , KC_SLASH, KC_ENT,
+                                ADJUST , KC_LGUI, KC_LALT, KC_SPC , SYM   ,         NAV     , KC_SPC , KC_RALT, _______, KC_APP
     ),
     
 /*
@@ -94,17 +94,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
  * |Ctrl/Esc|   A  |   R  |   S  |   T  |   G  |                              |   M  |   N  |   E  |   I  |   O  |Ctrl/' "|
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * | LShift |   Z  |   X  |   C  |   D  |   V  | [ {  |CapsLk|  |F-keys|  ] } |   K  |   H  | ,  < | . >  | /  ? | RShift |
+ * |  LCtrl |   Z  |   X  |   C  |   D  |   V  | [ {  |CapsLk|  |F-keys|  ] } |   K  |   H  | ,  < | . >  | /  ? | RShift |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        |Adjust| LGUI | LAlt/| Space| Nav  |  | Sym  | Space| AltGr| RGUI | Menu |
+ *                        |Adjust| LGUI | LAlt/| Space| Sym  |  | Nav  | Space| AltGr| RGUI | Menu |
  *                        |      |      | Enter|      |      |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  */
     [_COLEMAK_DH] = LAYOUT(
      KC_TAB  , KC_Q ,  KC_W   ,  KC_F  ,   KC_P ,   KC_B ,                                        KC_J,   KC_L ,  KC_U ,   KC_Y ,KC_SCLN, KC_BSPC,
      KC_LSFT , KC_A ,  KC_R   ,  KC_S  ,   KC_T ,   KC_G ,                                        KC_M,   KC_N ,  KC_E ,   KC_I ,  KC_O , KC_QUOT,
-     KC_LCTL , KC_Z ,  KC_X   ,  KC_C  ,   KC_D ,   KC_V , KC_LBRC,KC_CAPS,     KC_CAPS  , KC_RBRC, KC_K,   KC_H ,KC_COMM, KC_DOT ,KC_SLSH, KC_ENT,
-                                 ADJUST, KC_LGUI, KC_LALT, KC_SPC , NAV   ,     SYM    , KC_SPC ,KC_RALT, FKEYS, KC_APP
+     KC_LCTL , KC_Z ,  KC_X   ,  KC_C  ,   KC_D ,   KC_V , KC_LBRC,KC_CAPS,     KC_CAPS  , KC_RBRC, KC_K, KC_H ,KC_COMM, KC_DOT ,KC_SLSH, KC_ENT,
+                                 ADJUST, KC_LGUI, KC_LALT, KC_SPC , SYM   ,     NAV    , KC_SPC ,KC_RALT, _______, KC_APP
     ),
 
 /*
@@ -122,9 +122,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                        `----------------------------------'  `----------------------------------'
  */
     [_NAV] = LAYOUT(
-      KC_ESC , _______, _______, _______, _______, _______,                                     KC_PGUP, KC_HOME, KC_UP,   KC_END,  KC_VOLU, KC_DEL,
-      _______, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, _______,                                     KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, KC_VOLD, KC_INS,
-      _______, _______, _______, _______, _______, _______, _______, KC_SLCK, _______, _______,KC_PAUSE, KC_MPRV, KC_MPLY, KC_MNXT, KC_MUTE, KC_PSCR,
+      KC_ESC ,  KC_F9 ,  KC_F10,  KC_F11,  KC_F12, _______,                                     KC_PGUP, KC_HOME, KC_UP,   KC_END,  KC_VOLU, KC_DEL,
+      _______,  KC_F5 ,  KC_F6 ,  KC_F7 ,  KC_F8 , _______,                                     KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, KC_VOLD, KC_INS,
+      _______,  KC_F1 ,  KC_F2 ,  KC_F3 ,  KC_F4 , _______, _______, KC_SLCK, _______, _______,KC_PAUSE, KC_MPRV, KC_MPLY, KC_MNXT, KC_MUTE, KC_PSCR,
                                  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
     ),
 
@@ -163,12 +163,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  */
-    [_FUNCTION] = LAYOUT(
-      _______,  KC_F9 ,  KC_F10,  KC_F11,  KC_F12, _______,                                     _______, _______, _______, _______, _______, _______,
-      _______,  KC_F5 ,  KC_F6 ,  KC_F7 ,  KC_F8 , _______,                                     _______, KC_RSFT, KC_RCTL, KC_LALT, KC_RGUI, _______,
-      _______,  KC_F1 ,  KC_F2 ,  KC_F3 ,  KC_F4 , _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-                                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
-    ),
+    // [_FUNCTION] = LAYOUT(
+    //   _______,  KC_F9 ,  KC_F10,  KC_F11,  KC_F12, _______,                                     _______, _______, _______, _______, _______, _______,
+    //   _______,  KC_F5 ,  KC_F6 ,  KC_F7 ,  KC_F8 , _______,                                     _______, KC_RSFT, KC_RCTL, KC_LALT, KC_RGUI, _______,
+    //   _______,  KC_F1 ,  KC_F2 ,  KC_F3 ,  KC_F4 , _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+    //                              _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
+    // ),
 
 /*
  * Adjust Layer: Default layer settings, RGB
@@ -219,7 +219,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * DO NOT edit the rev1.c file; instead override the weakly defined default functions by your own.
  */
 
-/* DELETE THIS LINE TO UNCOMMENT (1/2)
+// /* DELETE THIS LINE TO UNCOMMENT (1/2)
 #ifdef OLED_ENABLE
 oled_rotation_t oled_init_user(oled_rotation_t rotation) { return OLED_ROTATION_180; }
 
@@ -242,21 +242,21 @@ bool oled_task_user(void) {
             case _QWERTY:
                 oled_write_P(PSTR("QWERTY\n"), false);
                 break;
-            case _DVORAK:
-                oled_write_P(PSTR("Dvorak\n"), false);
-                break;
+            // case _DVORAK:
+            //     oled_write_P(PSTR("Dvorak\n"), false);
+            //     break;
             case _COLEMAK_DH:
                 oled_write_P(PSTR("Colemak-DH\n"), false);
                 break;
             case _NAV:
-                oled_write_P(PSTR("Nav\n"), false);
+                oled_write_P(PSTR("Fn-Nav\n"), false);
                 break;
             case _SYM:
                 oled_write_P(PSTR("Sym\n"), false);
                 break;
-            case _FUNCTION:
-                oled_write_P(PSTR("Function\n"), false);
-                break;
+            // case _FUNCTION:
+            //     oled_write_P(PSTR("Function\n"), false);
+            //     break;
             case _ADJUST:
                 oled_write_P(PSTR("Adjust\n"), false);
                 break;
@@ -287,7 +287,7 @@ bool oled_task_user(void) {
     return false;
 }
 #endif
-*/
+// */
 
 #ifdef ENCODER_ENABLE
 bool encoder_update_user(uint8_t index, bool clockwise) {
@@ -302,7 +302,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                 tap_code(KC_VOLU);
             else
                 tap_code(KC_VOLD);
-        } else if (IS_LAYER_ON(_NAV)){
+        } else if (IS_LAYER_ON(_SYM)){
             if (clockwise) {
                 if (!is_alt_tab_active) {
                     is_alt_tab_active = true;
